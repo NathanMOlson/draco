@@ -225,6 +225,7 @@ class Scene {
   const Metadata &GetMetadata() const { return *metadata_; }
   Metadata &GetMetadata() { return *metadata_; }
 
+  std::vector<double> cesiumRtc;
  private:
   IndexTypeVector<MeshIndex, std::unique_ptr<Mesh>> meshes_;
   IndexTypeVector<MeshGroupIndex, std::unique_ptr<MeshGroup>> mesh_groups_;
