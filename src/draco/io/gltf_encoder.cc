@@ -691,7 +691,7 @@ class GltfAsset {
   // before it is used by the encoder.
   std::vector<std::unique_ptr<Mesh>> local_meshes_;
 
-  std::vector<double> cesiumRtc;
+  std::vector<double> cesium_rtc_;
 };
 
 int GltfAsset::UnsignedIntComponentSize(unsigned int max_value) {
@@ -1610,8 +1610,8 @@ Status GltfAsset::AddScene(const Scene &scene) {
   }
 
   // Cesium RTC
-  if (!scene.cesiumRtc.empty()){
-    cesiumRtc = scene.cesiumRtc;
+  cesium_rtc_ = scene.GetCesiumRtc();
+  if (!cesium_rtc_.empty()) {
     extensions_used_.insert("CESIUM_RTC");
   }
 
@@ -3067,7 +3067,7 @@ Status GltfAsset::EncodeTopLevelExtensionsProperty(EncoderBuffer *buf_out) {
   if (lights_.empty() && materials_variants_names_.empty() &&
       structural_metadata_->NumPropertyTables() == 0 &&
       structural_metadata_->NumPropertyAttributes() == 0 &&
-      cesiumRtc.empty()) {
+      cesium_rtc_.empty()) {
     return OkStatus();
   }
 
@@ -3153,13 +3153,13 @@ Status GltfAsset::EncodeMaterialsVariantsNamesProperty(EncoderBuffer *buf_out) {
 }
 
 Status GltfAsset::EncodeCesiumRTCProperty(EncoderBuffer *buf_out) {
-  if (cesiumRtc.empty()) {
+  if (cesium_rtc_.empty()) {
     return OkStatus();
   }
 
   gltf_json_.BeginObject("CESIUM_RTC");
   gltf_json_.BeginArray("center");
-  for (const double &val : cesiumRtc) {
+  for (const double &val : cesium_rtc_) {
     gltf_json_.OutputValue(val);
   }
   gltf_json_.EndArray();

@@ -1488,11 +1488,12 @@ Status GltfDecoder::DecodeGltfToScene() {
   // Cesium RTC
   if (std::find(gltf_model_.extensionsUsed.begin(), gltf_model_.extensionsUsed.end(), "CESIUM_RTC") != gltf_model_.extensionsUsed.end()){
       auto center = gltf_model_.extensions["CESIUM_RTC"].Get("center");
-      scene_->cesiumRtc.clear();
+      std::vector<double> cesium_rtc;
 
-      scene_->cesiumRtc.push_back(center.Get(0).GetNumberAsDouble());
-      scene_->cesiumRtc.push_back(center.Get(1).GetNumberAsDouble());
-      scene_->cesiumRtc.push_back(center.Get(2).GetNumberAsDouble());
+      cesium_rtc.push_back(center.Get(0).GetNumberAsDouble());
+      cesium_rtc.push_back(center.Get(1).GetNumberAsDouble());
+      cesium_rtc.push_back(center.Get(2).GetNumberAsDouble());
+      scene_->SetCesiumRtc(cesium_rtc);
   }
 
   return OkStatus();
